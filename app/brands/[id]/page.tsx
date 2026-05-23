@@ -627,137 +627,154 @@ export default function BrandDetailPage() {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
             {activeTab === "history" && (
-              <div className="grid gap-8 lg:grid-cols-[1fr]">
-                <article className="rounded-[32px] border border-[#eadbd4] bg-white p-8 shadow-sm">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8a2638]">
-                    Trayectoria y legado
-                  </p>
+  <div className="grid gap-6 lg:grid-cols-[1fr_0.38fr] lg:items-start">
+    <article className="overflow-hidden rounded-[28px] border border-[#eadbd4] bg-white p-5 shadow-sm sm:p-8">
+      <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8a2638] sm:text-xs sm:tracking-[0.25em]">
+        Trayectoria y legado
+      </p>
 
-                  <h2 className="mb-6 font-serif text-3xl font-bold text-[#151111]">
-                    Historia de {brand.name}
-                  </h2>
+      <h2 className="mb-5 font-serif text-3xl font-bold leading-tight text-[#151111] sm:text-4xl">
+        Historia de {brand.name}
+      </h2>
 
-                  <p className="mb-8 text-sm leading-7 text-[#6d6260]">
-                    {getBrandHistory(brand.name)?.origin} · Fundada en{" "}
-                    {getBrandHistory(brand.name)?.founded}
-                  </p>
+      <p className="mb-6 text-sm leading-7 text-[#6d6260]">
+        {getBrandHistory(brand.name)?.origin} · Fundada en{" "}
+        {getBrandHistory(brand.name)?.founded}
+      </p>
 
-                  {/* Narrativa */}
-                  <div className="mb-10 rounded-[24px] bg-[#fffdf9] p-6 border border-[#eadbd4]">
-                    <p className="mb-4 text-sm leading-7 text-[#151111]">
-                      {getBrandHistory(brand.name)?.narrative}
-                    </p>
-                  </div>
+      {/* Narrativa */}
+      <div className="mb-8 rounded-[22px] border border-[#eadbd4] bg-[#fffdf9] p-5 sm:p-6">
+        <p className="text-sm leading-7 text-[#151111]">
+          {getBrandHistory(brand.name)?.narrative}
+        </p>
+      </div>
 
-                  {/* Fundador */}
-                  <div className="mb-10 space-y-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8a2638]">
-                        Fundador
-                      </p>
-                      <p className="mt-2 text-sm font-semibold text-[#151111]">
-                        {getBrandHistory(brand.name)?.founder}
-                      </p>
-                    </div>
-                  </div>
+      {/* Fundador */}
+      <div className="mb-8">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#8a2638] sm:text-xs">
+          Fundador
+        </p>
+        <p className="mt-2 text-sm font-semibold text-[#151111]">
+          {getBrandHistory(brand.name)?.founder}
+        </p>
+      </div>
 
-                  {/* Timeline Horizontal */}
-                  <div className="mb-10">
-                    <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-[#8a2638]">
-                      Hitos clave
-                    </p>
+      {/* Timeline responsive */}
+      <div className="mb-8">
+        <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8a2638] sm:text-xs sm:tracking-[0.25em]">
+          Hitos clave
+        </p>
 
-                    <div className="overflow-x-auto pb-2">
-                      <div className="flex gap-4 min-w-max">
-                        {getBrandHistory(brand.name)?.keyMilestones.map(
-                          (milestone, index) => (
-                            <div key={index} className="flex flex-col items-center gap-3">
-                              <div className="h-12 w-12 rounded-full bg-[#8a2638] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                                {milestone.year}
-                              </div>
-                              <div className="text-center flex-shrink-0 w-32">
-                                <p className="text-xs font-bold text-[#151111] mb-1">
-                                  {milestone.year}
-                                </p>
-                                <p className="text-xs text-[#6d6260] leading-4">
-                                  {milestone.event}
-                                </p>
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Filosofía */}
-                  <div className="rounded-[24px] bg-[#f7ece8] p-6 border border-[#eadbd4]">
-                    <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8a2638] mb-3">
-                      Filosofía de marca
-                    </p>
-                    <p className="text-sm leading-6 text-[#6d6260]">
-                      {getBrandHistory(brand.name)?.philosophy}
-                    </p>
-                  </div>
-                </article>
-
-                <aside className="rounded-[32px] bg-[#151111] p-8 text-white shadow-xl">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#d9a7b0]">
-                    Brand Heritage
-                  </p>
-
-                  <h2 className="mb-5 font-serif text-3xl font-bold">
-                    Legado
-                  </h2>
-
-                  <div className="space-y-6">
-                    <div>
-                      <p className="text-xs font-bold text-[#e5a9b6] mb-2">
-                        Años de trayectoria
-                      </p>
-                      <p className="text-3xl font-bold">
-                        {new Date().getFullYear() -
-                          (getBrandHistory(brand.name)?.founded ?? 2000)}
-                      </p>
-                    </div>
-
-                    <div className="h-px bg-white/10"></div>
-
-                    <div>
-                      <p className="text-xs font-bold text-[#e5a9b6] mb-3">
-                        Dimensiones clave
-                      </p>
-                      <ul className="space-y-2 text-sm text-white/70">
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#e5a9b6] mt-1">•</span>
-                          <span>
-                            Fundación: {getBrandHistory(brand.name)?.founded}
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#e5a9b6] mt-1">•</span>
-                          <span>
-                            Origen: {getBrandHistory(brand.name)?.origin}
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#e5a9b6] mt-1">•</span>
-                          <span>
-                            Categoría: {brand.category}
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#e5a9b6] mt-1">•</span>
-                          <span>
-                            País: {brand.country}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </aside>
+        <div className="space-y-4 md:hidden">
+          {getBrandHistory(brand.name)?.keyMilestones.map((milestone, index) => (
+            <div
+              key={index}
+              className="flex gap-4 rounded-[20px] border border-[#eadbd4] bg-[#fbf7f4] p-4"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#8a2638] text-[11px] font-bold text-white">
+                {milestone.year}
               </div>
+
+              <div>
+                <p className="mb-1 text-sm font-bold text-[#151111]">
+                  {milestone.year}
+                </p>
+                <p className="text-sm leading-6 text-[#6d6260]">
+                  {milestone.event}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden overflow-x-auto pb-2 md:block">
+          <div className="flex min-w-max gap-4">
+            {getBrandHistory(brand.name)?.keyMilestones.map(
+              (milestone, index) => (
+                <div key={index} className="flex w-36 flex-col items-center gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#8a2638] text-xs font-bold text-white">
+                    {milestone.year}
+                  </div>
+
+                  <div className="text-center">
+                    <p className="mb-1 text-xs font-bold text-[#151111]">
+                      {milestone.year}
+                    </p>
+                    <p className="text-xs leading-4 text-[#6d6260]">
+                      {milestone.event}
+                    </p>
+                  </div>
+                </div>
+              )
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Filosofía */}
+      <div className="rounded-[22px] border border-[#eadbd4] bg-[#f7ece8] p-5 sm:p-6">
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8a2638] sm:text-xs sm:tracking-[0.25em]">
+          Filosofía de marca
+        </p>
+        <p className="text-sm leading-7 text-[#6d6260]">
+          {getBrandHistory(brand.name)?.philosophy}
+        </p>
+      </div>
+    </article>
+
+    <aside className="rounded-[28px] bg-[#151111] p-5 text-white shadow-xl sm:p-8">
+      <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-[#d9a7b0] sm:text-xs sm:tracking-[0.25em]">
+        Brand Heritage
+      </p>
+
+      <h2 className="mb-5 font-serif text-3xl font-bold">
+        Legado
+      </h2>
+
+      <div className="space-y-6">
+        <div>
+          <p className="mb-2 text-xs font-bold text-[#e5a9b6]">
+            Años de trayectoria
+          </p>
+          <p className="text-3xl font-bold">
+            {new Date().getFullYear() -
+              (getBrandHistory(brand.name)?.founded ?? 2000)}
+          </p>
+        </div>
+
+        <div className="h-px bg-white/10" />
+
+        <div>
+          <p className="mb-3 text-xs font-bold text-[#e5a9b6]">
+            Dimensiones clave
+          </p>
+
+          <ul className="space-y-2 text-sm text-white/70">
+            <li className="flex items-start gap-2">
+              <span className="mt-1 text-[#e5a9b6]">•</span>
+              <span>Fundación: {getBrandHistory(brand.name)?.founded}</span>
+            </li>
+
+            <li className="flex items-start gap-2">
+              <span className="mt-1 text-[#e5a9b6]">•</span>
+              <span>Origen: {getBrandHistory(brand.name)?.origin}</span>
+            </li>
+
+            <li className="flex items-start gap-2">
+              <span className="mt-1 text-[#e5a9b6]">•</span>
+              <span>Categoría: {brand.category}</span>
+            </li>
+
+            <li className="flex items-start gap-2">
+              <span className="mt-1 text-[#e5a9b6]">•</span>
+              <span>País: {brand.country}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+)}
 
             {activeTab === "dashboard" && (
               <>
