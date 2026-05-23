@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import HTMLFlipBook from "react-pageflip";
@@ -111,8 +111,33 @@ export default function TrendMagazine({
 }: TrendMagazineProps) {
   const bookRef = useRef<any>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+
+    const updateIsMobile = () => {
+      setIsMobile(mediaQuery.matches);
+    };
+
+    updateIsMobile();
+    mediaQuery.addEventListener("change", updateIsMobile);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateIsMobile);
+    };
+  }, []);
+
+  const pageWidth = isMobile ? 330 : 461;
+  const pageHeight = isMobile ? 520 : 600;
+  const bookWidth = isMobile ? pageWidth : pageWidth * 2;
+
+  const pageStyle = {
+    width: `${pageWidth}px`,
+    height: `${pageHeight}px`,
+  };
 
   const handleOpenMagazine = () => {
     if (!session) {
@@ -133,9 +158,9 @@ export default function TrendMagazine({
   const magazineTrends = visibleTrends.slice(0, 8);
 
   return (
-    <section className="my-16 flex w-full flex-col items-center overflow-visible">
+    <section className="my-10 flex w-full flex-col items-center overflow-hidden px-4 sm:my-16 sm:px-0">
       {!isOpen ? (
-        <div className="relative h-[600px] w-[460px] overflow-hidden shadow-[0_30px_90px_rgba(21,17,17,0.22)]">
+        <div className="relative aspect-[23/30] w-full max-w-[460px] overflow-hidden rounded-[10px] shadow-[0_30px_90px_rgba(21,17,17,0.22)]">
           <img
             src="/images/cover.jpg"
             alt="Trend Book"
@@ -144,18 +169,18 @@ export default function TrendMagazine({
 
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black/70" />
 
-          <div className="absolute inset-0 flex flex-col justify-between p-12 text-white">
-            <div>
-              
-            </div>
+          <div className="absolute inset-0 flex flex-col justify-between p-8 text-white sm:p-12">
+            <div />
 
             <div>
-              <p className="mb-6 font-serif text-6xl font-bold">2026</p>
+              <p className="mb-6 font-serif text-5xl font-bold sm:text-6xl">
+                2026
+              </p>
 
               <button
                 type="button"
                 onClick={handleOpenMagazine}
-                className="rounded-full bg-[#151111] px-9 py-4 text-xs font-bold uppercase tracking-[0.22em] text-white transition hover:bg-[#8a2638]"
+                className="rounded-full bg-[#151111] px-7 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition hover:bg-[#8a2638] sm:px-9 sm:text-xs sm:tracking-[0.22em]"
               >
                 Abrir revista
               </button>
@@ -164,17 +189,22 @@ export default function TrendMagazine({
         </div>
       ) : (
         <div className="flex w-full flex-col items-center">
-          <div className="relative h-[600px] w-[922px]">
-           <HTMLFlipBook
+          <div className="w-full overflow-x-auto overflow-y-hidden pb-4">
+            <div
+              className="relative mx-auto"
+              style={{ width: `${bookWidth}px`, height: `${pageHeight}px` }}
+            >
+              <HTMLFlipBook
+                key={isMobile ? "mobile" : "desktop"}
                 ref={bookRef}
-                width={461}
-                height={600}
+                width={pageWidth}
+                height={pageHeight}
                 size="fixed"
-                minWidth={461}
-                maxWidth={461}
-                minHeight={600}
-                maxHeight={600}
-                showCover={true}
+                minWidth={pageWidth}
+                maxWidth={pageWidth}
+                minHeight={pageHeight}
+                maxHeight={pageHeight}
+                showCover={!isMobile}
                 drawShadow={false}
                 flippingTime={330}
                 useMouseEvents={false}
@@ -182,173 +212,181 @@ export default function TrendMagazine({
                 className="mx-auto"
                 style={{}}
                 startPage={0}
-                usePortrait={false}
+                usePortrait={isMobile}
                 startZIndex={0}
                 autoSize={false}
                 clickEventForward={true}
                 swipeDistance={30}
-                showPageCorners={true}
+                showPageCorners={!isMobile}
                 disableFlipByClick={false}
                 maxShadowOpacity={0}
+              >
+                {/* PORTADA */}
+                <div
+                  className="relative overflow-hidden bg-[#151111]"
+                  style={pageStyle}
                 >
-              {/* PORTADA */}
-              <div className="relative h-[600px] w-[461px] overflow-hidden bg-[#151111]">
-                    <img
+                  <img
                     src="/images/cover.jpg"
                     alt="Trend Book"
                     className="h-full w-full object-cover"
-                    />
+                  />
 
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black/70" />
-
-              
-              </div>
-
-              {/* PÁGINA VACÍA */}
-              <div className="h-[600px] w-[461px] bg-[#f8f5f2]" />
-
-              {/* DESCRIPCIÓN DE LA REVISTA */}
-              <div className="h-[600px] w-[461px] bg-[#f8f5f2] p-14">
-                <div className="flex h-full flex-col justify-center">
-                  <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8a2638]">
-                    Editorial 2026
-                  </p>
-
-                  <h2 className="mt-6 font-serif text-6xl leading-[0.95] text-[#151111]">
-                    Fashion Trend
-                    <br />
-                    Forecast
-                  </h2>
-
-                  <p className="mt-10 max-w-[320px] text-lg leading-9 text-[#5f5652]">
-                    Una selección editorial de tendencias, comportamientos
-                    visuales y movimientos estéticos que definirán la conversación
-                    digital y la industria de la moda durante 2026.
-                  </p>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black/70" />
                 </div>
-              </div>
 
-              {magazineTrends.flatMap((trend, index) => [
+                {/* PÁGINA VACÍA */}
+                <div style={pageStyle} className="bg-[#f8f5f2]" />
+
+                {/* DESCRIPCIÓN DE LA REVISTA */}
                 <div
-                  key={`${trend.id}-visual`}
-                  className="relative h-[600px] w-[461px] overflow-hidden bg-[#f9f7f4] p-12"
+                  style={pageStyle}
+                  className="bg-[#f8f5f2] p-8 sm:p-14"
                 >
-                  <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8a2638]">
-                    Tendencia {index + 1}
-                  </p>
-
-                  <p className="mt-6 text-xs font-bold uppercase tracking-[0.35em] text-[#8a2638]">
-                    {trend.category}
-                  </p>
-
-                  <h2 className="mt-5 font-serif text-6xl font-bold leading-[0.9] text-[#151111]">
-                    {trend.name}
-                  </h2>
-
-                  <div className="mt-8 h-[320px] overflow-hidden rounded-[2px] bg-[#eee5df]">
-                    <img
-                      src={getImage(trend.id)}
-                      alt={trend.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-
-                  <span className="absolute bottom-8 left-12 text-sm font-bold text-[#8a2638]">
-                    {index * 2 + 4}
-                  </span>
-                </div>,
-
-                <div
-                  key={`${trend.id}-analysis`}
-                  className="relative h-[600px] w-[461px] overflow-hidden bg-[#f8f5f2] px-10 py-9"
-                >
-                  <div className="absolute inset-y-0 left-0 w-[14px] bg-gradient-to-r from-black/10 to-transparent" />
-
-                  <div className="relative z-10 flex h-full flex-col">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#8a2638]">
-                          Análisis editorial
-                        </p>
-
-                        <h2 className="mt-4 max-w-[300px] font-serif text-5xl font-bold leading-[0.9] text-[#151111]">
-                          {trend.status}
-                        </h2>
-                      </div>
-
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#151111] text-2xl font-black text-white">
-                        +{trend.growth ?? 0}
-                      </div>
-                    </div>
-
-                    <p className="mt-7 text-[15px] leading-7 text-[#352d2a]">
-                      {trend.description}
+                  <div className="flex h-full flex-col justify-center">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8a2638] sm:text-xs sm:tracking-[0.35em]">
+                      Editorial 2026
                     </p>
 
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {(trend.brands ?? []).map((brand) => (
-                        <span
-                          key={`${trend.id}-${brand}`}
-                          className="rounded-full bg-[#efe7e2] px-3 py-1.5 text-xs font-semibold text-[#5c514c]"
-                        >
-                          {brand}
-                        </span>
-                      ))}
-                    </div>
+                    <h2 className="mt-6 font-serif text-5xl leading-[0.95] text-[#151111] sm:text-6xl">
+                      Fashion Trend
+                      <br />
+                      Forecast
+                    </h2>
 
-                    <div className="mt-7 grid grid-cols-3 gap-3">
-                      <div className="rounded-[18px] bg-[#f3ece8] p-4">
-                        <p className="text-xs font-bold text-[#8a2638]">
-                          Growth
-                        </p>
-                        <p className="mt-2 text-2xl font-black text-[#151111]">
-                          +{trend.growth ?? 0}%
-                        </p>
-                      </div>
-
-                      <div className="rounded-[18px] bg-[#f3ece8] p-4">
-                        <p className="text-xs font-bold text-[#8a2638]">
-                          Pop.
-                        </p>
-                        <p className="mt-2 text-2xl font-black text-[#151111]">
-                          {trend.popularity}%
-                        </p>
-                      </div>
-
-                      <div className="rounded-[18px] bg-[#f3ece8] p-4">
-                        <p className="text-xs font-bold text-[#8a2638]">
-                          Sent.
-                        </p>
-                        <p className="mt-2 text-2xl font-black text-[#151111]">
-                          {trend.sentiment}%
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-auto rounded-[22px] border border-[#ead9d2] bg-[#fcfaf8] p-5">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#8a2638]">
-                        Insight
-                      </p>
-
-                      <p className="mt-3 text-sm leading-6 text-[#5f5652]">
-                        {getInsight(trend.status)}
-                      </p>
-                    </div>
+                    <p className="mt-8 max-w-[320px] text-base leading-8 text-[#5f5652] sm:mt-10 sm:text-lg sm:leading-9">
+                      Una selección editorial de tendencias, comportamientos
+                      visuales y movimientos estéticos que definirán la conversación
+                      digital y la industria de la moda durante 2026.
+                    </p>
                   </div>
+                </div>
 
-                  <span className="absolute bottom-6 right-10 text-xs font-bold text-[#8a2638]">
-                    {index * 2 + 5}
-                  </span>
-                </div>,
-              ])}
-            </HTMLFlipBook>
+                {magazineTrends.flatMap((trend, index) => [
+                  <div
+                    key={`${trend.id}-visual`}
+                    style={pageStyle}
+                    className="relative overflow-hidden bg-[#f9f7f4] p-7 sm:p-12"
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8a2638] sm:text-xs sm:tracking-[0.35em]">
+                      Tendencia {index + 1}
+                    </p>
+
+                    <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.25em] text-[#8a2638] sm:mt-6 sm:text-xs sm:tracking-[0.35em]">
+                      {trend.category}
+                    </p>
+
+                    <h2 className="mt-5 font-serif text-5xl font-bold leading-[0.9] text-[#151111] sm:text-6xl">
+                      {trend.name}
+                    </h2>
+
+                    <div className="mt-7 h-[250px] overflow-hidden rounded-[2px] bg-[#eee5df] sm:mt-8 sm:h-[320px]">
+                      <img
+                        src={getImage(trend.id)}
+                        alt={trend.name}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <span className="absolute bottom-7 left-7 text-sm font-bold text-[#8a2638] sm:bottom-8 sm:left-12">
+                      {index * 2 + 4}
+                    </span>
+                  </div>,
+
+                  <div
+                    key={`${trend.id}-analysis`}
+                    style={pageStyle}
+                    className="relative overflow-hidden bg-[#f8f5f2] px-7 py-7 sm:px-10 sm:py-9"
+                  >
+                    <div className="absolute inset-y-0 left-0 w-[14px] bg-gradient-to-r from-black/10 to-transparent" />
+
+                    <div className="relative z-10 flex h-full flex-col">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#8a2638] sm:text-[10px] sm:tracking-[0.32em]">
+                            Análisis editorial
+                          </p>
+
+                          <h2 className="mt-4 max-w-[250px] font-serif text-4xl font-bold leading-[0.9] text-[#151111] sm:max-w-[300px] sm:text-5xl">
+                            {trend.status}
+                          </h2>
+                        </div>
+
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#151111] text-lg font-black text-white sm:h-16 sm:w-16 sm:text-2xl">
+                          +{trend.growth ?? 0}
+                        </div>
+                      </div>
+
+                      <p className="mt-6 text-sm leading-6 text-[#352d2a] sm:mt-7 sm:text-[15px] sm:leading-7">
+                        {trend.description}
+                      </p>
+
+                      <div className="mt-5 flex flex-wrap gap-2 sm:mt-6">
+                        {(trend.brands ?? []).map((brand) => (
+                          <span
+                            key={`${trend.id}-${brand}`}
+                            className="rounded-full bg-[#efe7e2] px-3 py-1.5 text-[11px] font-semibold text-[#5c514c] sm:text-xs"
+                          >
+                            {brand}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-7 sm:gap-3">
+                        <div className="rounded-[16px] bg-[#f3ece8] p-3 sm:rounded-[18px] sm:p-4">
+                          <p className="text-[11px] font-bold text-[#8a2638] sm:text-xs">
+                            Growth
+                          </p>
+                          <p className="mt-2 text-xl font-black text-[#151111] sm:text-2xl">
+                            +{trend.growth ?? 0}%
+                          </p>
+                        </div>
+
+                        <div className="rounded-[16px] bg-[#f3ece8] p-3 sm:rounded-[18px] sm:p-4">
+                          <p className="text-[11px] font-bold text-[#8a2638] sm:text-xs">
+                            Pop.
+                          </p>
+                          <p className="mt-2 text-xl font-black text-[#151111] sm:text-2xl">
+                            {trend.popularity}%
+                          </p>
+                        </div>
+
+                        <div className="rounded-[16px] bg-[#f3ece8] p-3 sm:rounded-[18px] sm:p-4">
+                          <p className="text-[11px] font-bold text-[#8a2638] sm:text-xs">
+                            Sent.
+                          </p>
+                          <p className="mt-2 text-xl font-black text-[#151111] sm:text-2xl">
+                            {trend.sentiment}%
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-auto rounded-[20px] border border-[#ead9d2] bg-[#fcfaf8] p-4 sm:rounded-[22px] sm:p-5">
+                        <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-[#8a2638] sm:text-[10px] sm:tracking-[0.3em]">
+                          Insight
+                        </p>
+
+                        <p className="mt-3 text-sm leading-6 text-[#5f5652]">
+                          {getInsight(trend.status)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="absolute bottom-6 right-7 text-xs font-bold text-[#8a2638] sm:right-10">
+                      {index * 2 + 5}
+                    </span>
+                  </div>,
+                ])}
+              </HTMLFlipBook>
+            </div>
           </div>
 
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4">
             <button
               type="button"
               onClick={() => bookRef.current?.pageFlip().flipPrev()}
-              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-3xl shadow-md"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-3xl shadow-md sm:h-14 sm:w-14"
+              aria-label="Página anterior"
             >
               ‹
             </button>
@@ -356,7 +394,8 @@ export default function TrendMagazine({
             <button
               type="button"
               onClick={() => bookRef.current?.pageFlip().flipNext()}
-              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-3xl shadow-md"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-3xl shadow-md sm:h-14 sm:w-14"
+              aria-label="Página siguiente"
             >
               ›
             </button>
@@ -364,7 +403,7 @@ export default function TrendMagazine({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="ml-4 rounded-full bg-[#151111] px-9 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white"
+              className="rounded-full bg-[#151111] px-7 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-white sm:ml-4 sm:px-9 sm:text-xs sm:tracking-[0.2em]"
             >
               Cerrar
             </button>
