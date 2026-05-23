@@ -208,13 +208,13 @@ export default function RadarPage() {
 
   return (
     <PageContainer>
-      <section className="py-20">
+      <section className="py-14 md:py-20">
         <div className="mb-14">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.35em] text-[#8a2638]">
             Fashion Radar
           </p>
 
-          <h1 className="max-w-[1200px] font-serif text-5xl font-bold leading-[1.05] text-[#151111] md:text-[3.9rem] xl:text-[4.4rem]">
+          <h1 className="max-w-[1200px] font-serif text-4xl font-bold leading-[1.05] text-[#151111] sm:text-5xl md:text-[3.9rem] xl:text-[4.4rem]">
             <span className="block md:whitespace-nowrap">
               Recursos de moda seleccionados
             </span>
@@ -231,14 +231,14 @@ export default function RadarPage() {
         </div>
       </section>
 
-      <section className="pb-20">
+      <section className="pb-16 md:pb-20">
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#8a2638]">
               Calendario
             </p>
 
-            <h2 className="font-serif text-4xl font-bold text-[#151111]">
+            <h2 className="font-serif text-3xl font-bold text-[#151111] md:text-4xl">
               Próximos eventos de moda
             </h2>
           </div>
@@ -250,19 +250,19 @@ export default function RadarPage() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-[34px] border border-[#eadbd4] bg-white shadow-sm">
-          <div className="flex flex-col gap-5 border-b border-[#f0e3de] bg-[#fbf5f2] px-6 py-5 md:flex-row md:items-center md:justify-between">
+        <div className="overflow-hidden rounded-[28px] border border-[#eadbd4] bg-white shadow-sm md:rounded-[34px]">
+          <div className="flex flex-col gap-5 border-b border-[#f0e3de] bg-[#fbf5f2] px-4 py-5 sm:px-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8a2638]">
                 Agenda de moda
               </p>
 
-              <h3 className="mt-1 font-serif text-3xl font-bold text-[#151111]">
+              <h3 className="mt-1 font-serif text-2xl font-bold text-[#151111] sm:text-3xl">
                 {selectedMonth.label} {SELECTED_YEAR}
               </h3>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={goToPreviousMonth}
@@ -299,136 +299,243 @@ export default function RadarPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-7 border-b border-[#f0e3de] bg-white">
-            {WEEK_DAYS.map((day) => (
-              <div
-                key={day}
-                className="border-r border-[#f0e3de] px-3 py-3 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-[#8a2638] last:border-r-0"
-              >
-                {day}
+          {loading && (
+            <div className="border-b border-[#f0e3de] bg-[#fffdf9] px-4 py-3 text-sm text-[#6d6260]">
+              Cargando eventos...
+            </div>
+          )}
+
+          {/* Vista móvil: lista de eventos limpia */}
+          <div className="md:hidden">
+            {monthEvents.length === 0 ? (
+              <div className="px-5 py-8 text-center">
+                <p className="font-serif text-2xl font-bold text-[#151111]">
+                  Sin eventos este mes
+                </p>
+                <p className="mt-3 text-sm leading-6 text-[#6d6260]">
+                  Cuando se añadan eventos al calendario, aparecerán aquí
+                  ordenados por fecha.
+                </p>
               </div>
-            ))}
-          </div>
-
-          <div
-            key={`${selectedMonth.short}-${selectedMonthIndex}`}
-            className={`grid grid-cols-7 ${
-              monthDirection === "next"
-                ? "radar-month-transition-next"
-                : "radar-month-transition-previous"
-            }`}
-          >
-            {calendarCells.map((cell, index) => {
-              const isLastColumn = (index + 1) % 7 === 0;
-
-              if (cell.type === "empty") {
-                return (
-                  <div
-                    key={cell.id}
-                    className={`min-h-[220px] border-t border-[#f0e3de] bg-[#fffafa] p-3 ${
-                      isLastColumn ? "" : "border-r border-[#f0e3de]"
-                    }`}
-                  />
-                );
-              }
-
-              const isEmpty = cell.events.length === 0;
-
-              return (
-                <div
-                  key={cell.id}
-                  className={`min-h-[220px] border-t border-[#f0e3de] bg-white p-3 ${
-                    isLastColumn ? "" : "border-r border-[#f0e3de]"
-                  }`}
-                >
-                  <div className="mb-3 flex items-center justify-between">
-                    <span
-                      className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                        cell.events.length > 0
-                          ? "bg-[#151111] text-white"
-                          : "bg-[#f7ece8] text-[#8a2638]"
-                      }`}
+            ) : (
+              <div className="space-y-4 px-4 py-5">
+                {[...monthEvents]
+                  .sort((a, b) => Number(a.day) - Number(b.day))
+                  .map((event) => (
+                    <article
+                      key={event.id}
+                      className="rounded-[24px] border border-[#eadbd4] bg-[#fffdf9] p-4 shadow-sm"
                     >
-                      {cell.day}
-                    </span>
+                      <div className="flex gap-4">
+                        <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl bg-[#151111] text-white">
+                          <span className="text-xl font-bold leading-none">
+                            {event.day}
+                          </span>
+                          <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em]">
+                            {selectedMonth.short}
+                          </span>
+                        </div>
 
-                    <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#8a2638]/70">
-                      {selectedMonth.short}
-                    </span>
-                  </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                            <span className="rounded-full bg-[#f7ece8] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-[#8a2638]">
+                              {event.category}
+                            </span>
 
-                  {isEmpty ? (
-                    <div className="h-full rounded-2xl border border-dashed border-[#eadbd4] bg-[#fffdf9] p-3 text-[11px] leading-5 text-[#b39a94]">
-                      Sin eventos destacados
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {cell.events.map((event) => (
-                        <div
-                          key={event.id}
-                          className="rounded-2xl border border-[#eadbd4] bg-[#f7ece8] p-3 shadow-sm group relative"
-                        >
-                          <div className="mb-1 flex items-center justify-between gap-2">
-                            <div className="flex-1">
-                              <span className="rounded-full bg-white px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.14em] text-[#8a2638]">
-                                {event.category}
+                            {event.relevanceScore > 0 && (
+                              <span className="rounded-full bg-[#151111] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                                {getRelevanceLabel(event.relevanceScore)}
                               </span>
-
-                              {event.relevanceScore > 0 && (
-                                <span className="ml-1 rounded-full bg-[#151111] px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.1em] text-white">
-                                  {getRelevanceLabel(event.relevanceScore)}
-                                </span>
-                              )}
-                            </div>
-
-                            {isAdmin && !event.isMocked && (
-                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                                <button
-                                  onClick={() => {
-                                    setEditingEvent(event);
-                                    setShowCreateModal(true);
-                                  }}
-                                  className="p-1 hover:bg-[#8a2638] hover:text-white rounded"
-                                  title="Editar"
-                                >
-                                  <Edit2 className="w-3 h-3" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteEvent(event.id)}
-                                  className="p-1 hover:bg-red-600 hover:text-white rounded"
-                                  title="Eliminar"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
                             )}
                           </div>
 
-                          <h4 className="font-serif text-[12px] font-bold leading-normal text-[#151111]">
+                          <h4 className="font-serif text-xl font-bold leading-tight text-[#151111]">
                             {event.name}
                           </h4>
 
-                          <p className="text-[10px] font-semibold leading-5 text-[#8a2638]">
+                          <p className="mt-2 text-sm font-semibold leading-6 text-[#8a2638]">
                             {event.location}
                           </p>
-
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedEventDetail(event);
-                            }}
-                            className="mt-2 w-full rounded text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8a2638] hover:bg-[#f0e3de] px-2 py-1 transition"
-                          >
-                            Ver detalles
-                          </button>
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+
+                      {event.description && (
+                        <p className="mt-4 line-clamp-3 text-sm leading-6 text-[#6d6260]">
+                          {event.description}
+                        </p>
+                      )}
+
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedEventDetail(event)}
+                          className="w-full rounded-full border border-[#eadbd4] bg-white px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#8a2638] transition hover:bg-[#8a2638] hover:text-white"
+                        >
+                          Ver detalles
+                        </button>
+
+                        {isAdmin && !event.isMocked && (
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingEvent(event);
+                                setShowCreateModal(true);
+                              }}
+                              className="rounded-full border border-[#eadbd4] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#151111]"
+                            >
+                              Editar
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteEvent(event.id)}
+                              className="rounded-full border border-red-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-red-600"
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          {/* Vista escritorio: calendario completo */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-7 border-b border-[#f0e3de] bg-white">
+              {WEEK_DAYS.map((day) => (
+                <div
+                  key={day}
+                  className="border-r border-[#f0e3de] px-3 py-3 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-[#8a2638] last:border-r-0"
+                >
+                  {day}
                 </div>
-              );
-            })}
+              ))}
+            </div>
+
+            <div
+              key={`${selectedMonth.short}-${selectedMonthIndex}`}
+              className={`grid grid-cols-7 ${
+                monthDirection === "next"
+                  ? "radar-month-transition-next"
+                  : "radar-month-transition-previous"
+              }`}
+            >
+              {calendarCells.map((cell, index) => {
+                const isLastColumn = (index + 1) % 7 === 0;
+
+                if (cell.type === "empty") {
+                  return (
+                    <div
+                      key={cell.id}
+                      className={`min-h-[180px] border-t border-[#f0e3de] bg-[#fffafa] p-3 xl:min-h-[220px] ${
+                        isLastColumn ? "" : "border-r border-[#f0e3de]"
+                      }`}
+                    />
+                  );
+                }
+
+                const isEmpty = cell.events.length === 0;
+
+                return (
+                  <div
+                    key={cell.id}
+                    className={`min-h-[180px] border-t border-[#f0e3de] bg-white p-3 xl:min-h-[220px] ${
+                      isLastColumn ? "" : "border-r border-[#f0e3de]"
+                    }`}
+                  >
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                      <span
+                        className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
+                          cell.events.length > 0
+                            ? "bg-[#151111] text-white"
+                            : "bg-[#f7ece8] text-[#8a2638]"
+                        }`}
+                      >
+                        {cell.day}
+                      </span>
+
+                      <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#8a2638]/70">
+                        {selectedMonth.short}
+                      </span>
+                    </div>
+
+                    {isEmpty ? (
+                      <div className="h-full rounded-2xl border border-dashed border-[#eadbd4] bg-[#fffdf9] p-3 text-[11px] leading-5 text-[#b39a94]">
+                        Sin eventos destacados
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {cell.events.map((event) => (
+                          <div
+                            key={event.id}
+                            className="group relative rounded-2xl border border-[#eadbd4] bg-[#f7ece8] p-3 shadow-sm"
+                          >
+                            <div className="mb-1 flex items-center justify-between gap-2">
+                              <div className="flex-1">
+                                <span className="rounded-full bg-white px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.14em] text-[#8a2638]">
+                                  {event.category}
+                                </span>
+
+                                {event.relevanceScore > 0 && (
+                                  <span className="ml-1 rounded-full bg-[#151111] px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.1em] text-white">
+                                    {getRelevanceLabel(event.relevanceScore)}
+                                  </span>
+                                )}
+                              </div>
+
+                              {isAdmin && !event.isMocked && (
+                                <div className="flex gap-1 opacity-0 transition group-hover:opacity-100">
+                                  <button
+                                    onClick={() => {
+                                      setEditingEvent(event);
+                                      setShowCreateModal(true);
+                                    }}
+                                    className="rounded p-1 hover:bg-[#8a2638] hover:text-white"
+                                    title="Editar"
+                                  >
+                                    <Edit2 className="h-3 w-3" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteEvent(event.id)}
+                                    className="rounded p-1 hover:bg-red-600 hover:text-white"
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+
+                            <h4 className="font-serif text-[12px] font-bold leading-normal text-[#151111]">
+                              {event.name}
+                            </h4>
+
+                            <p className="text-[10px] font-semibold leading-5 text-[#8a2638]">
+                              {event.location}
+                            </p>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedEventDetail(event);
+                              }}
+                              className="mt-2 w-full rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8a2638] transition hover:bg-[#f0e3de]"
+                            >
+                              Ver detalles
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -803,8 +910,8 @@ function EventModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-5 shadow-lg sm:p-6">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="font-serif text-2xl font-bold text-[#151111]">
             {editingEvent ? "Editar evento" : "Nuevo evento"}
@@ -998,7 +1105,7 @@ function EventDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -1006,14 +1113,14 @@ function EventDetailModal({
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl rounded-3xl bg-white p-8 shadow-2xl"
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl sm:p-8"
       >
         <div className="mb-6 flex items-start justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8a2638]">
               Detalles del evento
             </p>
-            <h2 className="mt-2 font-serif text-4xl font-bold text-[#151111]">
+            <h2 className="mt-2 font-serif text-3xl font-bold text-[#151111] sm:text-4xl">
               {event.name}
             </h2>
           </div>
