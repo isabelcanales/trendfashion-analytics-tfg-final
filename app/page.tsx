@@ -21,9 +21,9 @@ type NewsArticle = {
 };
 
 const FALLBACK_IMAGES = [
-  "/news-fallbacks/news-placeholder.svg",
-  "/news-fallbacks/news-placeholder.svg",
-  "/news-fallbacks/news-placeholder.svg",
+  "/news-fallbacks/fallback-1.jpg",
+  "/news-fallbacks/fallback-2.jpg",
+  "/news-fallbacks/fallback-3.jpg",
 ];
 
 function getFallbackImage(index: number) {
@@ -211,11 +211,11 @@ export default function HomePage() {
         </div>
 
         <article className="grid overflow-hidden rounded-[2rem] border border-[#eaded4] bg-[#fffdf9] shadow-[0_24px_70px_rgba(60,35,30,0.08)] md:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative min-h-[260px] overflow-hidden bg-[#f5ebe8] md:min-h-[360px]">
+          <div className="relative h-[260px] overflow-hidden bg-[#f5ebe8] md:h-auto md:min-h-[360px]">
             <img
               src={featuredNews.image || getFallbackImage(0)}
               alt={featuredNews.title}
-              className="h-full w-full object-cover transition duration-500 hover:scale-105"
+              className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = getFallbackImage(0);
