@@ -1,0 +1,456 @@
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Francois+One&family=Kdam+Thmor+Pro&family=Merriweather:wght@400;700&family=Playfair+Display:wght@600;700;800&family=Roboto:wght@400;700&display=swap");
+
+.trend-magazine-section {
+  width: 100%;
+  margin: 4rem 0;
+}
+
+.magazine-viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 2rem 0 3rem;
+}
+
+.magazine-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: min-content;
+}
+
+.trend-magazine-empty {
+  padding: 3rem;
+  text-align: center;
+  color: #6d6260;
+}
+
+/* CLOSED COVER */
+
+.closed-magazine {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.cover {
+  position: relative;
+  width: 460px;
+  height: 600px;
+  overflow: hidden;
+  background: #151111;
+  box-shadow: 0 28px 80px rgba(21, 17, 17, 0.24);
+}
+
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(21, 17, 17, 0.12) 0%,
+    rgba(21, 17, 17, 0.1) 45%,
+    rgba(21, 17, 17, 0.7) 100%
+  );
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.9) contrast(1.02);
+}
+
+.cover-text {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 44px 42px;
+  color: white;
+}
+
+.cover-kicker {
+  margin-bottom: 1.25rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+.cover h2 {
+  max-width: 330px;
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+}
+
+.cover-subtitle {
+  margin-top: 1.5rem;
+  max-width: 270px;
+  font-family: "Merriweather", serif;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cover-year {
+  margin-bottom: 1.5rem;
+  font-family: "Playfair Display", serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cover-button {
+  border: none;
+  border-radius: 999px;
+  background: #151111;
+  color: white;
+  padding: 14px 28px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.cover-button:hover {
+  background: #8a2638;
+  transform: translateY(-2px);
+}
+
+/* OPEN MAGAZINE */
+
+.open-magazine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.magazine-spread {
+  position: relative;
+  display: grid;
+  grid-template-columns: 461px 461px;
+  width: 922px;
+  height: 600px;
+  background: white;
+  box-shadow: 0 26px 80px rgba(21, 17, 17, 0.16);
+}
+
+.magazine-spread::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 10;
+  width: 34px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.08),
+    rgba(255, 255, 255, 0.7),
+    rgba(0, 0, 0, 0.1)
+  );
+  pointer-events: none;
+}
+
+.magazine-page {
+  position: relative;
+  height: 600px;
+  overflow: hidden;
+  background: #f9fafe;
+  color: #111;
+}
+
+.magazine-page-left {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.magazine-page-right {
+  border-left: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.left-page-overlay,
+.right-page-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.left-page-overlay {
+  background: linear-gradient(to right, transparent 88%, rgba(0, 0, 0, 0.12));
+}
+
+.right-page-overlay {
+  background: linear-gradient(to left, transparent 88%, rgba(0, 0, 0, 0.1));
+}
+
+.left-page-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 38px 42px 34px;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-kicker {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8a2638;
+}
+
+.left-page-content h2 {
+  margin-top: 1.1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 3.3rem;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  color: #151111;
+}
+
+.page-category {
+  margin-top: 1rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8a2638;
+}
+
+.editorial-image-wrap {
+  margin-top: auto;
+  width: 100%;
+  height: 335px;
+  overflow: hidden;
+  background: #eadbd4;
+}
+
+.trend-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* RIGHT PAGE */
+
+.article-header {
+  padding: 40px 42px 22px;
+}
+
+.article-header h3 {
+  margin-top: 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #151111;
+}
+
+.article-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 0 42px;
+}
+
+.article-text {
+  font-family: "Merriweather", serif;
+  font-size: 0.73rem;
+  line-height: 1.72;
+  color: #151111;
+  text-indent: 18px;
+  margin: 0 0 0.85rem;
+}
+
+.article-text strong {
+  color: #8a2638;
+}
+
+.no-indent {
+  text-indent: 0;
+}
+
+.dropcap {
+  float: left;
+  margin: 0 7px 0 0;
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 0.78;
+  color: #8a2638;
+}
+
+.first-line {
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pull-quote {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(21, 17, 17, 0.18);
+}
+
+.pull-quote span {
+  display: block;
+  height: 34px;
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  line-height: 0.8;
+  color: #151111;
+}
+
+.pull-quote p {
+  margin: 0.7rem 0 0;
+  font-family: "Francois One", sans-serif;
+  font-size: 1.18rem;
+  line-height: 1.25;
+  color: #151111;
+}
+
+/* PAGE NUMBERS */
+
+.page-number {
+  position: absolute;
+  bottom: 20px;
+  z-index: 5;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #151111;
+}
+
+.page-number-left {
+  left: 42px;
+}
+
+.page-number-right {
+  right: 42px;
+}
+
+/* CONTROLS */
+
+.magazine-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.nav-btn {
+  width: 54px;
+  height: 54px;
+  border: none;
+  border-radius: 999px;
+  background: #f1f1f1;
+  color: #151111;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: #eadbd4;
+  transform: translateY(-2px);
+}
+
+.close-btn {
+  height: 54px;
+  border: none;
+  border-radius: 999px;
+  background: #151111;
+  color: white;
+  padding: 0 28px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #8a2638;
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 980px) {
+  .magazine-viewport {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .magazine-spread {
+    transform: scale(0.82);
+    transform-origin: top center;
+    margin-bottom: -90px;
+  }
+}
+
+@media (max-width: 760px) {
+  .cover {
+    width: min(88vw, 380px);
+    height: 520px;
+  }
+
+  .cover h2 {
+    font-size: 4rem;
+  }
+
+  .magazine-spread {
+    display: flex;
+    flex-direction: column;
+    width: min(92vw, 461px);
+    height: auto;
+    transform: none;
+    margin-bottom: 0;
+  }
+
+  .magazine-spread::after {
+    display: none;
+  }
+
+  .magazine-page {
+    width: 100%;
+    height: 600px;
+  }
+
+  .magazine-page-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .article-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .pull-quote p {
+    font-size: 1rem;
+  }
+}
