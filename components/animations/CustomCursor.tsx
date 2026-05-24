@@ -3,10 +3,29 @@
 import { useEffect, useState } from "react";
 
 export default function CustomCursor() {
+  const [enabled, setEnabled] = useState(false);
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    const updateEnabled = () => {
+      setEnabled(mediaQuery.matches);
+    };
+
+    updateEnabled();
+
+    mediaQuery.addEventListener("change", updateEnabled);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateEnabled);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const move = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
@@ -31,7 +50,9 @@ export default function CustomCursor() {
         el.removeEventListener("mouseleave", removeHover);
       });
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <>
